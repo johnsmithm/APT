@@ -5,35 +5,37 @@
     
 using namespace std;
 
-template<typename T>
+template<typename T, size_t size_>
 class Vector
 {
 public:
-    Vector( int size )
-        : size_( size )
+    Vector()
+      //  : size_( size )
     {
-        assert( size >= 0 );
-        data_ = new T[size];
+      //  assert( size >= 0 );
+      //  data_ = new T[size];
+        for (int i = 0; i < size_; ++i)
+            data_[i]=0;
     }
     
-    Vector( int size, const T & initValue )
-        : size_( size )
+  /*  Vector( int size, const T & initValue )
+       // : size_( size )
     {
-        assert( size >= 0 );
+     //   assert( size >= 0 );
         data_ = new T[size];
         std::fill( data_, data_+size_, initValue );
     }
-    
-     Vector( int size, std::function<T(int)> f)
-        : size_( size )
+    */
+     Vector(  std::function<T(int)> f)
+     //   : size_( size )
     {
-        assert( size >= 0 );
-        data_ = new T[size];
-        for(int i=0;i<size;++i)data_[i] = f(i);
+       // assert( size >= 0 );
+        //data_ = new T[size];
+        for(int i=0;i<size_;++i)data_[i] = f(i);
     }
     
-    Vector( const Vector & o )
-        : size_( o.size_ )
+   /* Vector( const Vector & o )
+      //  : size_( o.size_ )
     {
        data_ = new T[size_];
        std::copy( o.data_, o.data_+size_, data_ );
@@ -41,43 +43,44 @@ public:
     
     ~Vector()
     {
-        delete [] data_;
+     //   delete [] data_;
     }    
-    
+    */
     public :double l2Norm ( ) const {
-        double norm = 0.;
-        /*for (int i = 0; i < size_; ++i)
-        norm += data_[i] * data_[i];*/
-        norm = std::accumulate(data_,data_+size_,0.,[](T & sum,T b){
+        T norm = 0.;
+        //for (int i = 0; i < size_; ++i)
+        //norm += data_[i] * data_[i];
+        norm = std::accumulate(&data_[0],&data_[0]+size_,0.,[](T & sum,T b){
         return (sum+b*b);
         });
         return sqrt(norm);
     }
     
-    Vector operator+( const Vector & o )
+    Vector operator+( const Vector & o ) const
     {
-        assert( size_ == o.size_ );
-        Vector result(size_);
-        std::transform( data_, data_ + size_, o.data_, result.data_, std::plus<T>() );
+      Vector result;
+        for(int i=0;i<size_;++i)
+            result.data_[i] = data_[i]+o.data_[i];
         return result;
     }
     
-    Vector operator-( const Vector & o )const
+    Vector operator-( const Vector & o ) const
     {
-        assert( size_ == o.size_ );
-        Vector result(size_);
-        std::transform( data_, data_ + size_, o.data_, result.data_, std::minus<T>() );
+        Vector result;
+        for(int i=0;i<size_;++i)
+            result.data_[i] = data_[i]-o.data_[i];
         return result;
+        
     }
     
-    Vector & operator= ( const Vector & o )
+   /* Vector & operator= ( const Vector & o )
     {
         Vector tmp( o );
         std::swap ( data_, tmp.data_ );
-        std::swap ( size_, tmp.size_ );
+       // std::swap ( size_, tmp.size_ );
         return *this;
     }
-    
+    */
     
     T & operator() ( int i )
     {
@@ -95,13 +98,12 @@ public:
     
     
 private:
-    T * data_;
-    int size_;
+     std::array<T, size_> data_;
 };
 
 
-template<typename T>
-ostream & operator<<( ostream & os, const Vector<T> & v )
+template<typename T, size_t size_>
+ostream & operator<<( ostream & os, const Vector<T,size_> & v )
 {
     for( int i=0; i < v.size(); ++i )
     {

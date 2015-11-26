@@ -4,6 +4,12 @@
 //template<typename T>
 //class Vector;
 
+/*template<typename T,size_t rows, size_t cols>
+class Matrix;
+
+template<typename T, size_t rows_>
+using Vector = Matrix<T, rows_, 1>;*/
+
 template<typename T, class Derived, size_t rows, size_t cols >
 class MatrixLike {
 public:
@@ -11,7 +17,7 @@ public:
 	virtual ~MatrixLike () noexcept = 0; // pure virtual destructor
 
 	/// virtual operators
-	virtual Vector<T> operator* (const Vector<T> & o) const = 0;
+	virtual Vector<T,rows> operator* (const Vector<T,rows> & o) const = 0;
 	// feel free to extend as required
 
 	// TODO: optimize the () operator
@@ -21,7 +27,7 @@ public:
 	/// other functions
 	virtual Derived inverseDiagonal( ) const = 0;
 	// feel free to extend as required
-    virtual double l2Norm ( ) const = 0;
+    virtual double l2Norm ( ) const {return 0.;};
     
 
 protected:
@@ -29,4 +35,4 @@ protected:
 
 // MatrixLike d'tor implementation
 template<typename T, class Derived, size_t rows, size_t cols>
-inline MatrixLike<T, Derived>::~MatrixLike () noexcept { }
+inline MatrixLike<T, Derived, rows, cols>::~MatrixLike () noexcept { }

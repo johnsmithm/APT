@@ -13,7 +13,7 @@ template<typename T>
 using StencilEntry = std::pair<int, T>; // convenience type for stencil entries
 
 template<typename T, size_t rows, size_t cols >
-class Stencil : public MatrixLike<T, Stencil<T,rows,cols> >/* TODO: inherit MatrixLike */ {
+class Stencil : public MatrixLike<T, Stencil<T,rows,cols>, rows, cols >/* TODO: inherit MatrixLike */ {
 public:
 	Stencil(const std::vector<StencilEntry<T> >& boundaryEntries, const std::vector<StencilEntry<T> >& innerEntries)
 		: boundaryStencil_(boundaryEntries), innerStencil_(innerEntries) { 
@@ -53,18 +53,18 @@ public:
         Vector<T,rows> t;
         
         for(int i=0;i<boundaryStencil_.size();++i)
-        t(0,0)+=o(0+boundaryStencil_[i].first,0)*boundaryStencil_[i].second; //A(0, 0) = 1.;
+        t(0)+=o(0+boundaryStencil_[i].first)*boundaryStencil_[i].second; //A(0, 0) = 1.;
         
         for (int x = 1; x < o.size() - 1; ++x) {
             for(int i=0;i<innerStencil_.size();++i)
-                t(x,0) += o(x+innerStencil_[i].first,0)*innerStencil_[i].second ;
+                t(x) += o(x+innerStencil_[i].first)*innerStencil_[i].second ;
             //A(x, x - 1) = 1. / hxSq;
             //A(x, x) = -2. / hxSq;
             //A(x, x + 1) = 1. / hxSq;
         }
         
         for(int i=0;i<boundaryStencil_.size();++i)
-        t(o.size()-1,0)+=o(o.size()-1-boundaryStencil_[i].first,0)*boundaryStencil_[i].second;//A(numGridPoints - 1, numGridPoints - 1) = 1.;
+        t(o.size()-1)+=o(o.size()-1-boundaryStencil_[i].first)*boundaryStencil_[i].second;//A(numGridPoints - 1, numGridPoints - 1) = 1.;
         
         return t;
     };
