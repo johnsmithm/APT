@@ -2,6 +2,7 @@
 #include <cassert>
 #include <iostream>
 #include <math.h>
+#include <functional>
     
 using namespace std;
 

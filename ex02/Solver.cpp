@@ -3,14 +3,15 @@
 #include "Vector.h"
 #include "Matrix.h"
 #include "Stencil.h"
+#include <functional>
 
 #define PI 3.141592653589793
-const int numGridPoints = 33;
+const int numGridPoints = 129;
 
 
 template<typename T, class Derived, size_t numPoints>
 void solve (const MatrixLike<T, Derived ,numPoints,numPoints>& A, const Vector<T,numPoints>& b, Vector<T,numPoints>& u) {
-//	const size_t numGridPoints = u.size( );
+
 
 	double initRes = (b - (A * u)).l2Norm( ); // determine the initial residual
 	double curRes = initRes;
@@ -33,6 +34,21 @@ void solve (const MatrixLike<T, Derived ,numPoints,numPoints>& A, const Vector<T
 	}
 
 	std::cout << "Residual after iteration " << curIt << ":\t" << curRes << std::endl << std::endl; // print the final number of iterations and the final residual
+}
+
+
+double measureTime (std::function<void( )> toMeasure) { 
+    // TODO: start timing
+    clock_t t1,t2;
+    t1=clock();
+    //siwir::Timer timer;
+	toMeasure();
+    //double time = timer.elapsed();
+    t2=clock();
+    double diff ((double)t2-(double)t1);
+    double time = diff / CLOCKS_PER_SEC;
+    std::cout << "time:" << time << '\n' ;
+	return time;
 }
 
 void testFullMatrix (/*const int  numGridPoints*/) {
@@ -72,21 +88,23 @@ void testFullMatrix (/*const int  numGridPoints*/) {
     float time = diff / CLOCKS_PER_SEC;
     std::cout << "time:" << time << '\n' ;
 	// TODO: end timing and print elapsed time
+	
+	//auto f  = std::bind(solve,A,b,u);
+	//f();
 }
 
-void testStencil (const int numGridPoints) {
-	// TODO: add stencil code
-	// the stencil can be set up using
-	//		Stencil<double> ASten({ { 0, 1. } }, { { -1, 1. / hxSq },{ 0, -2. / hxSq },{ 1, 1. / hxSq } });
+void testStencil () {
+	
+
     const double hx = 1. / (numGridPoints - 1);
 	const double hxSq = hx * hx;
 
 	std::cout << "Starting Stencil solver for " << numGridPoints << " grid points" << std::endl;
 
-    //dynamic_cast<constexpr>numGridPoints;
+    
     
 	Stencil<double,numGridPoints,numGridPoints> ASten({ { 0, 1. } }, { { -1, 1. / hxSq },{ 0, -2. / hxSq },{ 1, 1. / hxSq } });
-/*	Vector<double,numGridPoints> u;
+	Vector<double,numGridPoints> u;
     int numGridPoints1 = numGridPoints;
 	Vector<double,numGridPoints> b([numGridPoints1](int x)->double{return sin(2. * PI * (x / (double)(numGridPoints1 - 1)));});
     
@@ -104,12 +122,11 @@ void testStencil (const int numGridPoints) {
     float diff ((float)t2-(float)t1);
     float time = diff / CLOCKS_PER_SEC;
     std::cout << "time:" << time << '\n' ;
-    */
+    
 }
 
 
 int main(int argc, char** argv) {
-    
     testFullMatrix(  );
-    testStencil( 17 );
+    testStencil(  );
 }

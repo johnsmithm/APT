@@ -13,7 +13,9 @@ class Matrix : public MatrixLike<T, Matrix<T,rows,cols> , rows, cols >
 public:    
     
     Matrix(){
-             static_assert( cols >= 0 && rows>=0 ,"Incorect rows and cols value");  
+             static_assert( cols > 0 && rows > 0 ,"Incorect rows and cols value"); 
+		// can I avoid that?
+		
             for(int i=0;i<rows;++i)
              for(int j=0;j<cols;++j)
                 data_[j+cols*i] = 0;
