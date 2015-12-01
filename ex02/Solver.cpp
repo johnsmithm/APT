@@ -47,8 +47,7 @@ double measureTime (std::function<void( )> toMeasure) {
     t2=clock();
     double diff ((double)t2-(double)t1);
     double time = diff / CLOCKS_PER_SEC;
-    std::cout << "time:" << time << '\n' ;
-	return time;
+    return time;
 }
 
 void testFullMatrix (/*const int  numGridPoints*/) {
@@ -62,7 +61,7 @@ void testFullMatrix (/*const int  numGridPoints*/) {
 	Vector<double,numGridPoints> b;
 
     A(0, 0) = 1.;
-    for (int x = 1; x < numGridPoints - 1; ++x) {
+    for (size_t x = 1; x < numGridPoints - 1; ++x) {
         A(x, x - 1) = 1. / hxSq;
         A(x, x) = -2. / hxSq;
         A(x, x + 1) = 1. / hxSq;
@@ -70,27 +69,17 @@ void testFullMatrix (/*const int  numGridPoints*/) {
     A(numGridPoints - 1, numGridPoints - 1) = 1.;
     
 
-	for (int x = 0; x < numGridPoints; ++x) {
+	for (size_t x = 0; x < numGridPoints; ++x) {
 		b(x) = sin(2. * PI * (x / (double)(numGridPoints - 1)));
 	}
       //  std::cout<<A<<'\n'<<b;
     
 	std::cout << "Initialization complete\n";
-    
-	// TODO: start timing
-    clock_t t1,t2;
-    t1=clock();
-    //siwir::Timer timer;
-	solve(A, b, u);
-    //double time = timer.elapsed();
-    t2=clock();
-    float diff ((float)t2-(float)t1);
-    float time = diff / CLOCKS_PER_SEC;
-    std::cout << "time:" << time << '\n' ;
-	// TODO: end timing and print elapsed time
+   
+	double f  = measureTime(std::bind(solve<double, Matrix<double,numGridPoints,numGridPoints >, numGridPoints >,A,b,u));
 	
-	//auto f  = std::bind(solve,A,b,u);
-	//f();
+	std::cout << "time with std::bind:" << f << '\n' ;
+	
 }
 
 void testStencil () {

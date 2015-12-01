@@ -15,7 +15,7 @@ public:
     {
       //  assert( size >= 0 );
       //  data_ = new T[size];
-        for (int i = 0; i < size_; ++i)
+        for (size_t i = 0; i < size_; ++i)
             data_[i]=0;
     }
     
@@ -27,12 +27,12 @@ public:
         std::fill( data_, data_+size_, initValue );
     }
     */
-     Vector(  std::function<T(int)> f)
+     Vector(  std::function<T(size_t)> f)
      //   : size_( size )
     {
        // assert( size >= 0 );
         //data_ = new T[size];
-        for(int i=0;i<size_;++i)data_[i] = f(i);
+        for(size_t i=0;i<size_;++i)data_[i] = f(i);
     }
     
    /* Vector( const Vector & o )
@@ -60,7 +60,7 @@ public:
     Vector operator+( const Vector & o ) const
     {
       Vector result;
-        for(int i=0;i<size_;++i)
+        for(size_t i=0;i<size_;++i)
             result.data_[i] = data_[i]+o.data_[i];
         return result;
     }
@@ -68,7 +68,7 @@ public:
     Vector operator-( const Vector & o ) const
     {
         Vector result;
-        for(int i=0;i<size_;++i)
+        for(size_t i=0;i<size_;++i)
             result.data_[i] = data_[i]-o.data_[i];
         return result;
         
@@ -83,13 +83,13 @@ public:
     }
     */
     
-    T & operator() ( int i )
+    T & operator() ( size_t i )
     {
         assert( i>=0 && i < size_ );
         return data_[i];
     }
     
-    T operator()( int i ) const
+    T operator()( size_t i ) const
     {
         assert( i>=0 && i < size_ );
         return data_[i];
@@ -106,7 +106,7 @@ private:
 template<typename T, size_t size_>
 ostream & operator<<( ostream & os, const Vector<T,size_> & v )
 {
-    for( int i=0; i < v.size(); ++i )
+    for( size_t i=0; i < v.size(); ++i )
     {
         os << v(i) << " ";
         os<<"\n";

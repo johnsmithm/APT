@@ -49,15 +49,15 @@ public:
 	Vector<T,rows> operator* (const Vector<T,rows> & o) const {        
         Vector<T,rows> t;
         
-        for(int i=0;i<boundaryStencil_.size();++i)
+        for(size_t i=0;i<boundaryStencil_.size();++i)
         t(0)+=o(0+boundaryStencil_[i].first)*boundaryStencil_[i].second; //A(0, 0) = 1.;
         
-        for (int x = 1; x < o.size() - 1; ++x) {
-            for(int i=0;i<innerStencil_.size();++i)
+        for (auto x = 1; x < o.size() - 1; ++x) {
+            for(size_t i=0;i<innerStencil_.size();++i)
                 t(x) += o(x+innerStencil_[i].first)*innerStencil_[i].second ;
         }
         
-        for(int i=0;i<boundaryStencil_.size();++i)
+        for(size_t i=0;i<boundaryStencil_.size();++i)
         t(o.size()-1)+=o(o.size()-1-boundaryStencil_[i].first)*boundaryStencil_[i].second;//A(numGridPoints - 1, numGridPoints - 1) = 1.;
         
         return t;

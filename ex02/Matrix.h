@@ -16,8 +16,8 @@ public:
              static_assert( cols > 0 && rows > 0 ,"Incorect rows and cols value"); 
 		// can I avoid that?
 		
-            for(int i=0;i<rows;++i)
-             for(int j=0;j<cols;++j)
+            for(size_t i=0;i<rows;++i)
+             for(size_t j=0;j<cols;++j)
                 data_[j+cols*i] = 0;
     }    
  /*   Matrix(  std::function<T(int)> f)
@@ -42,7 +42,7 @@ public:
     Matrix inverseDiagonal()const{
     //assert(sizex_==sizey_);
         Matrix o;
-        for(int i=0;i<cols;++i)o.data_[i+cols*i]= 1.0/data_[i+cols*i];
+        for(size_t i=0;i<cols;++i)o.data_[i+cols*i]= 1.0/data_[i+cols*i];
         return o;
     }
     
@@ -57,8 +57,8 @@ public:
     Vector<T,rows> operator* (const Vector<T,rows> & o)const {
          //assert(el==rows);
          Vector<T,rows> t;
-         for(int i=0;i<rows;++i)
-             for(int j=0;j<cols;++j)
+         for(size_t i=0;i<rows;++i)
+             for(size_t j=0;j<cols;++j)
                 t(i)=t(i)+data_[j+cols*i]*o(j);
          return t;
     }
@@ -76,13 +76,13 @@ public:
     */
     
    
-    T & operator() ( int i ,int j) 
+    T & operator() ( size_t i ,size_t j) 
     {
         assert( i>=0 && i < rows && j>=0 && j < cols );
         return data_[i*cols+j];
     }//difference between these two??
     
-    const T & operator() ( int i ,int j)const
+    const T & operator() ( size_t i ,size_t j)const
     {
         assert( i>=0 && i < rows && j>=0 && j < cols );
         return data_[i*cols+j];
@@ -136,9 +136,9 @@ private:
 template<typename T, size_t rows, size_t cols >
 ostream & operator<<( ostream & os, const Matrix<T,rows,cols> & v )
 {
-    for( int i=0; i < rows; ++i )
+    for( size_t i=0; i < rows; ++i )
     {
-        for( int j=0; j < cols; ++j )
+        for( size_t j=0; j < cols; ++j )
         {
             os << v(i,j) << " ";
         }
