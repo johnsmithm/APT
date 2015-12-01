@@ -46,8 +46,8 @@ public:
 	// HINT: stencil entries are stored as offset/coefficient pair, that is the offset specifies which element of a
 	// vector, relative to the current index, is to be regarded. It is then multiplied with the according coefficient.
 	// All of these expressions are evaluated and then summed up to get the final result.
-	Vector<T,rows> operator* (const Vector<T,rows> & o) const {        
-        Vector<T,rows> t;
+	Matrix<T,rows,1> operator* (const Matrix<T,rows,1> & o) const {        
+        Matrix<T,rows,1> t;
         
         for(int i=0;i<boundaryStencil_.size();++i)
         t(0)+=o(0+boundaryStencil_[i].first)*boundaryStencil_[i].second; //A(0, 0) = 1.;

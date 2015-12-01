@@ -56,7 +56,7 @@ public:
         });
         return sqrt(norm);
     }
-    
+    //does compiler check if o has the same size as this?
     Vector operator+( const Vector & o ) const
     {
       Vector result;

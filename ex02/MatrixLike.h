@@ -4,9 +4,9 @@
 //template<typename T>
 //class Vector;
 
-/*template<typename T,size_t rows, size_t cols>
+template<typename T,size_t rows, size_t cols>
 class Matrix;
-
+/*
 template<typename T, size_t rows_>
 using Vector = Matrix<T, rows_, 1>;*/
 
@@ -17,7 +17,7 @@ public:
 	virtual ~MatrixLike () noexcept = 0; // pure virtual destructor
 
 	/// virtual operators
-	virtual Vector<T,rows> operator* (const Vector<T,rows> & o) const = 0;
+	virtual Matrix<T,rows,1> operator* (const Matrix<T,rows,1> & o) const = 0;
 	// feel free to extend as required
 
 	// TODO: optimize the () operator

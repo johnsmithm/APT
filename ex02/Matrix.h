@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <functional>
 #include <typeinfo>
 #include <math.h>
 #include "MatrixLike.h"
@@ -20,13 +21,13 @@ public:
              for(int j=0;j<cols;++j)
                 data_[j+cols*i] = 0;
     }    
- /*   Matrix(  std::function<T(int)> f)
+   Matrix(  std::function<T(int)> f)
        
     {
         static_assert( rows >= 0 ,"Incorect");
         for(int i=0;i<rows;++i)data_[i] = f(i);
     }
-    
+  /*  
     Matrix( const Matrix<T,orows,ocols> & o )
         : sizex_( o.sizex_ ),sizey_( o.sizey_ )
     {
@@ -54,12 +55,12 @@ public:
         return sqrt(norm);
     }
 
-    Vector<T,rows> operator* (const Vector<T,rows> & o)const {
+    Matrix<T,rows,1> operator* (const Matrix<T,rows,1> & o)const {
          //assert(el==rows);
-         Vector<T,rows> t;
+         Matrix<T,rows,1> t;
          for(int i=0;i<rows;++i)
              for(int j=0;j<cols;++j)
-                t(i)=t(i)+data_[j+cols*i]*o(j);
+                t.data_[i]=t.data_[i]+data_[j+cols*i]*o.data_[j];
          return t;
     }
         
@@ -87,7 +88,7 @@ public:
         assert( i>=0 && i < rows && j>=0 && j < cols );
         return data_[i*cols+j];
     }
-    /*
+    
      T & operator() ( int i )
     {
         assert( i>=0 && i < rows );
@@ -101,28 +102,28 @@ public:
     } 
     
     
-    Vector<T,rows> operator+( const Vector<T,rows> & o )
+    Matrix<T,rows,1> operator+( const Matrix<T,rows,1> & o )
     {
         //assert( size_ == o.size_ );
-        Vector<T,rows> result;
+        Matrix<T,rows,1> result;
         for(int i=0;i<rows;++i)
-            result(i)+=o(i);
+            result.data_[i]=data_[i]+o.data_[i];
+        //std::transform( data_, data_ + rows, o.data_, result.data_, std::plus<T>() );
+        return result;
+    }
+    //why does not work for curRes = (b - (A * u)).l2Norm( );
+    Matrix<T,rows,1> operator-( const Matrix<T,rows,1> & o )
+    {
+        //assert( size_ == o.size_ );
+        Matrix<T,rows,1> result;
+        for(int i=0;i<rows;++i)
+            result.data_[i]=data_[i] - o.data_[i];
         //std::transform( data_, data_ + rows, o.data_, result.data_, std::plus<T>() );
         return result;
     }
     
-    Vector<T,rows> operator-( const Vector<T,rows> & o )
-    {
-        //assert( size_ == o.size_ );
-        Vector<T,rows> result;
-        for(int i=0;i<rows;++i)
-            result(i)-=o(i);
-        //std::transform( data_, data_ + rows, o.data_, result.data_, std::plus<T>() );
-        return result;
-    }
     
-    
-    int size() const { return rows;  }*/
+    int size() const { return rows;  }
     int sizex() const { return rows; }
     
     int sizey() const { return cols; }

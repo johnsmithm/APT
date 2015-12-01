@@ -10,7 +10,7 @@ const int numGridPoints = 129;
 
 
 template<typename T, class Derived, size_t numPoints>
-void solve (const MatrixLike<T, Derived ,numPoints,numPoints>& A, const Vector<T,numPoints>& b, Vector<T,numPoints>& u) {
+void solve (const MatrixLike<T, Derived ,numPoints,numPoints>& A, const Matrix<T,numPoints,1>& b, Matrix<T,numPoints,1>& u) {
 
 
 	double initRes = (b - (A * u)).l2Norm( ); // determine the initial residual
@@ -58,8 +58,8 @@ void testFullMatrix (/*const int  numGridPoints*/) {
 	std::cout << "Starting full matrix solver for " << numGridPoints << " grid points" << std::endl;
 
 	Matrix<double,numGridPoints,numGridPoints> A;
-	Vector<double,numGridPoints> u;
-	Vector<double,numGridPoints> b;
+	Matrix<double,numGridPoints,1> u;
+	Matrix<double,numGridPoints,1> b;
 
     A(0, 0) = 1.;
     for (int x = 1; x < numGridPoints - 1; ++x) {
@@ -104,9 +104,9 @@ void testStencil () {
     
     
 	Stencil<double,numGridPoints,numGridPoints> ASten({ { 0, 1. } }, { { -1, 1. / hxSq },{ 0, -2. / hxSq },{ 1, 1. / hxSq } });
-	Vector<double,numGridPoints> u;
+	Matrix<double,numGridPoints,1> u;
     int numGridPoints1 = numGridPoints;
-	Vector<double,numGridPoints> b([numGridPoints1](int x)->double{return sin(2. * PI * (x / (double)(numGridPoints1 - 1)));});
+	Matrix<double,numGridPoints,1> b([numGridPoints1](int x)->double{return sin(2. * PI * (x / (double)(numGridPoints1 - 1)));});
     
     
   
@@ -127,6 +127,6 @@ void testStencil () {
 
 
 int main(int argc, char** argv) {
-    testFullMatrix(  );
+    //testFullMatrix(  );
     testStencil(  );
 }
