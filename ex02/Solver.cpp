@@ -6,7 +6,7 @@
 #include <functional>
 
 #define PI 3.141592653589793
-const int numGridPoints = 129;
+//const int numGridPoints = 129;
 
 
 template<typename T, class Derived, size_t numPoints>
@@ -49,7 +49,7 @@ double measureTime (std::function<void( )> toMeasure) {
     double time = diff / CLOCKS_PER_SEC;
     return time;
 }
-
+template <int numGridPoints>
 void testFullMatrix (/*const int  numGridPoints*/) {
 	const double hx = 1. / (numGridPoints - 1);
 	const double hxSq = hx * hx;
@@ -81,7 +81,7 @@ void testFullMatrix (/*const int  numGridPoints*/) {
 	std::cout << "time with std::bind:" << f << '\n' ;
 	
 }
-
+template <int numGridPoints>
 void testStencil () {
 	
 
@@ -94,7 +94,7 @@ void testStencil () {
     
 	Stencil<double,numGridPoints,numGridPoints> ASten({ { 0, 1. } }, { { -1, 1. / hxSq },{ 0, -2. / hxSq },{ 1, 1. / hxSq } });
 	Vector<double,numGridPoints> u;
-    int numGridPoints1 = numGridPoints;
+        int numGridPoints1 = numGridPoints;
 	Vector<double,numGridPoints> b([numGridPoints1](int x)->double{return sin(2. * PI * (x / (double)(numGridPoints1 - 1)));});
     
     
@@ -116,6 +116,6 @@ void testStencil () {
 
 
 int main(int argc, char** argv) {
-    testFullMatrix(  );
-    testStencil(  );
+    testFullMatrix<129>(  );
+    testStencil<129>(  );
 }
